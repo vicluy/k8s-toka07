@@ -1,0 +1,7 @@
+kubectl taint nodes  kube-master node-role.kubernetes.io/master-
+
+kubectl apply -f .\pod.yml
+
+kubectl get pod web -owide
+NAME   READY   STATUS    RESTARTS   AGE   IP          NODE          NOMINATED NODE   READINESS GATES
+web    1/1     Running   0          35m   10.46.0.1   kube-master   <none>           <none>

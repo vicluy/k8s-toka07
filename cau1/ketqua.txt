@@ -1,0 +1,55 @@
+###### khoi tao instances ############
+gcloud compute instances create kube-master --machine-type=e2-medium --image=ubuntu-1804-bionic-v20210817 --image-project=ubuntu-os-cloud --boot-disk-size=200GB
+
+gcloud compute instances create kube-worker1 --machine-type=e2-medium --image=ubuntu-1804-bionic-v20210817 --image-project=ubuntu-os-cloud --boot-disk-size=200GB
+
+gcloud compute instances create kube-worker2 --machine-type=e2-medium --image=ubuntu-1804-bionic-v20210817 --image-project=ubuntu-os-cloud --boot-disk-size=200GB
+
+gcloud compute firewall-rules create nodeports --allow tcp:30000-40000
+
+###### creat cluster ############
+https://hungtran.gitbook.io/kubernetes/lab-setup/create-kubeamd-based-cluster
+
+### creat deployment ####
+kubectl create deployment webapp --image=nginx:1.18.0 --replicas=2
+
+## expose ra nodeport #####
+kubectl expose deployment webapp --type NodePort --port 80
+
+## check pod & deployment ######
+kubectl get pod
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-5f4c4c965f-hzghc   1/1     Running   0          7m14s
+webapp-5f4c4c965f-pnhc2   1/1     Running   0          7m14s
+
+kubectl get deployment
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+webapp   2/2     2            2           7m20s
+
+#########curl tren master #####
+curl http://localhost:31021
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
